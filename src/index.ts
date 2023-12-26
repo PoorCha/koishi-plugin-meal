@@ -1,16 +1,13 @@
 import { Context, Schema, h } from 'koishi'
+import menu from '../menu.json'
 
 export const name = 'meal'
 
 export interface Config {
-  json_url: string
+
 }
 
-export const Config: Schema<Config> = Schema.object({
-  json_url: Schema.string().default(),
-})
-
-const axios = require('axios');
+export const Config = Schema.object({})
 
 export async function apply(ctx: Context, config: Config) {
   registerCommand(ctx, config);
@@ -61,12 +58,6 @@ function registerCommand(ctx, config) {
       // 读入json文件，从中抽取一套配餐，包括五类：主食、荤菜、素菜、小吃与甜品、粥汤与饮品
       // 主食有九大类：米饭、粉面、馒头、汉堡、三明治、披萨、水饺、包子和饼类
 
-      // 读取在线 JSON 文件
-      const originJsonUrl = config.json_url.toString();
-
-      const response = await axios.get(originJsonUrl);
-      const menu = response.data;
-
       let randomStaple = '';
       let randomMeatDish = '';
       let randomVegetarianDish = '';
@@ -105,6 +96,6 @@ function registerCommand(ctx, config) {
         }
         await session.sendQueued(h.at(session.userId) + ` 今天的配餐是：\n` + meal.join('\n'));
       }
-      
+
     });
 }
